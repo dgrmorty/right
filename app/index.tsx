@@ -41,33 +41,33 @@ type WashPackage = {
 const packages: WashPackage[] = [
   {
     id: 'express',
-    title: 'Express Shine',
-    subtitle: 'Быстрая наружная мойка',
+    title: 'Express Glow',
+    subtitle: 'Быстрый блеск для города',
     price: '890 ₽',
     duration: '25 мин',
     accent: palette.cyan,
     icon: Zap,
-    perks: ['Пена active foam', 'Сушка турбовоздухом', 'Чернение шин'],
+    perks: ['Active foam', 'Сушка воздухом', 'Чернение шин'],
   },
   {
     id: 'deep',
-    title: 'Deep Clean',
-    subtitle: 'Салон + кузов без компромиссов',
+    title: 'Deep Reset',
+    subtitle: 'Салон и кузов в деталях',
     price: '1 990 ₽',
     duration: '55 мин',
     accent: palette.mint,
     icon: Sparkles,
-    perks: ['Детейлинг салона', 'Нано-воск', 'Антидождь стекол'],
+    perks: ['Детейлинг салона', 'Нано-воск', 'Антидождь'],
   },
   {
     id: 'ceramic',
-    title: 'Ceramic Pro',
-    subtitle: 'Премиальная защита блеска',
+    title: 'Ceramic Black',
+    subtitle: 'Защита и шоурум-блеск',
     price: '4 900 ₽',
     duration: '2 ч',
     accent: palette.violet,
     icon: ShieldCheck,
-    perks: ['Керамический слой', 'Полировка фар', 'Защита дисков'],
+    perks: ['Керамический слой', 'Фары + диски', 'Гидрофоб'],
   },
 ];
 
@@ -79,7 +79,7 @@ const stats = [
   { value: '24/7', label: 'запись', icon: Clock },
 ];
 
-const process = ['Сканируем авто', 'Моем в 3 фазы', 'Сушим и проверяем'];
+const process = ['Скан авто', '3-фазная мойка', 'Финальный контроль'];
 
 export default function HomeScreen() {
   const [selectedPackageId, setSelectedPackageId] = useState(packages[1].id);
@@ -107,13 +107,13 @@ export default function HomeScreen() {
   return (
     <View style={styles.root}>
       <LinearGradient
-        colors={[palette.ink, '#092547', '#07111F'] as const}
-        locations={[0, 0.48, 1] as const}
+        colors={[palette.ink, '#07152D', '#0B1020', palette.ink] as const}
+        locations={[0, 0.35, 0.72, 1] as const}
         style={StyleSheet.absoluteFill}
       />
-      <Bubble size={260} x={-90} y={54} color="rgba(34, 211, 238, 0.22)" />
-      <Bubble size={210} x={238} y={180} color="rgba(139, 92, 246, 0.23)" delay={600} />
-      <Bubble size={160} x={-42} y={610} color="rgba(82, 246, 182, 0.18)" delay={1100} />
+      <Bubble size={300} x={-122} y={42} color="rgba(103, 232, 249, 0.18)" />
+      <Bubble size={240} x={226} y={138} color="rgba(167, 139, 250, 0.18)" delay={600} />
+      <Bubble size={180} x={-54} y={640} color="rgba(94, 234, 212, 0.13)" delay={1100} />
 
       <SafeAreaView style={styles.safeArea}>
         <ScrollView
@@ -123,7 +123,7 @@ export default function HomeScreen() {
           <MotionView animation="slide" style={styles.header}>
             <View>
               <Text style={styles.kicker}>RIGHT WASH</Text>
-              <Text style={styles.title}>Мойка авто, которая выглядит как премиум-сервис</Text>
+              <Text style={styles.title}>Детейлинг по записи без ожидания</Text>
             </View>
             <View style={styles.locationPill}>
               <MapPin color={palette.cyan} size={16} />
@@ -133,7 +133,7 @@ export default function HomeScreen() {
 
           <MotionView delay={120} animation="pop">
             <LinearGradient
-              colors={['rgba(34, 211, 238, 0.36)', 'rgba(37, 99, 235, 0.18)', 'rgba(255,255,255,0.08)'] as const}
+              colors={['rgba(103, 232, 249, 0.26)', 'rgba(59, 130, 246, 0.12)', 'rgba(255,255,255,0.07)'] as const}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               style={styles.heroCard}
@@ -144,13 +144,25 @@ export default function HomeScreen() {
                 </View>
                 <View style={styles.liveBadge}>
                   <View style={styles.liveDot} />
-                  <Text style={styles.liveText}>свободно сейчас</Text>
+                  <Text style={styles.liveText}>3 бокса онлайн</Text>
                 </View>
               </View>
-              <Text style={styles.heroTitle}>Запишись за 10 секунд</Text>
+              <Text style={styles.heroTitle}>Запись за 10 секунд, результат как после студии</Text>
               <Text style={styles.heroSubtitle}>
-                Умная очередь, прозрачные цены, хаптика на действиях и аккуратные анимации на каждом шаге.
+                Выберите пакет, закрепите слот и отслеживайте мойку в аккуратном live-интерфейсе.
               </Text>
+              <View style={styles.heroDock}>
+                <View style={styles.carPanel}>
+                  <Text style={styles.panelLabel}>Следующий слот</Text>
+                  <Text style={styles.panelValue}>{selectedSlot}</Text>
+                  <Text style={styles.panelHint}>сегодня, бокс 02</Text>
+                </View>
+                <View style={styles.scorePanel}>
+                  <Sparkles color={palette.mint} size={18} />
+                  <Text style={styles.scoreValue}>98%</Text>
+                  <Text style={styles.scoreLabel}>готовность</Text>
+                </View>
+              </View>
               <View style={styles.statsRow}>
                 {stats.map((item, index) => (
                   <StatCard key={item.label} {...item} delay={220 + index * 70} />
@@ -302,8 +314,11 @@ function PackageCard({
         <View style={styles.perkRow}>
           <Clock color={palette.muted} size={14} />
           <Text style={styles.perkText}>{item.duration}</Text>
-          <Text style={styles.perkDivider}>/</Text>
-          <Text style={styles.perkText}>{item.perks[0]}</Text>
+          {item.perks.map((perk) => (
+            <View key={perk} style={styles.perkChip}>
+              <Text style={styles.perkChipText}>{perk}</Text>
+            </View>
+          ))}
         </View>
       </Pressable>
     </MotionView>
@@ -399,38 +414,38 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 20,
-    paddingBottom: 44,
+    paddingBottom: 48,
   },
   bubble: {
     borderRadius: 999,
-    opacity: 0.88,
+    opacity: 0.9,
     position: 'absolute',
   },
   header: {
-    alignItems: 'flex-start',
+    alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 22,
+    marginBottom: 20,
   },
   kicker: {
     color: palette.cyan,
     fontSize: 12,
     fontWeight: '800',
-    letterSpacing: 2.4,
+    letterSpacing: 2.8,
     marginBottom: 8,
   },
   title: {
     color: palette.text,
-    fontSize: 31,
+    fontSize: 32,
     fontWeight: '900',
-    letterSpacing: -1.1,
-    lineHeight: 36,
-    maxWidth: 292,
+    letterSpacing: -1.2,
+    lineHeight: 37,
+    maxWidth: 284,
   },
   locationPill: {
     alignItems: 'center',
-    backgroundColor: palette.card,
-    borderColor: 'rgba(255,255,255,0.14)',
+    backgroundColor: 'rgba(255,255,255,0.08)',
+    borderColor: palette.line,
     borderRadius: 999,
     borderWidth: 1,
     flexDirection: 'row',
@@ -444,12 +459,12 @@ const styles = StyleSheet.create({
     fontWeight: '800',
   },
   heroCard: {
-    borderColor: 'rgba(255,255,255,0.18)',
+    borderColor: palette.lineStrong,
     borderRadius: radii.xl,
     borderWidth: 1,
-    marginBottom: 28,
+    marginBottom: 30,
     overflow: 'hidden',
-    padding: 22,
+    padding: 20,
     ...shadow,
   },
   heroTopRow: {
@@ -460,16 +475,20 @@ const styles = StyleSheet.create({
   },
   logoMark: {
     alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.13)',
-    borderRadius: 24,
+    backgroundColor: 'rgba(255,255,255,0.14)',
+    borderColor: 'rgba(255,255,255,0.18)',
+    borderRadius: 26,
+    borderWidth: 1,
     height: 68,
     justifyContent: 'center',
     width: 68,
   },
   liveBadge: {
     alignItems: 'center',
-    backgroundColor: 'rgba(6,17,31,0.46)',
+    backgroundColor: 'rgba(5,8,18,0.48)',
+    borderColor: 'rgba(255,255,255,0.13)',
     borderRadius: 999,
+    borderWidth: 1,
     flexDirection: 'row',
     gap: 8,
     paddingHorizontal: 12,
@@ -488,24 +507,79 @@ const styles = StyleSheet.create({
   },
   heroTitle: {
     color: palette.text,
-    fontSize: 28,
+    fontSize: 29,
     fontWeight: '900',
-    letterSpacing: -0.8,
+    letterSpacing: -1,
+    lineHeight: 34,
     marginBottom: 10,
   },
   heroSubtitle: {
-    color: '#D1E5F3',
+    color: '#D5E2EF',
     fontSize: 15,
     lineHeight: 22,
-    marginBottom: 20,
+    marginBottom: 18,
+  },
+  heroDock: {
+    flexDirection: 'row',
+    gap: 12,
+    marginBottom: 16,
+  },
+  carPanel: {
+    backgroundColor: 'rgba(5,8,18,0.42)',
+    borderColor: 'rgba(255,255,255,0.14)',
+    borderRadius: 24,
+    borderWidth: 1,
+    flex: 1,
+    padding: 15,
+  },
+  panelLabel: {
+    color: palette.muted,
+    fontSize: 11,
+    fontWeight: '800',
+    letterSpacing: 0.7,
+    textTransform: 'uppercase',
+  },
+  panelValue: {
+    color: palette.text,
+    fontSize: 28,
+    fontWeight: '900',
+    letterSpacing: -0.7,
+    marginTop: 8,
+  },
+  panelHint: {
+    color: '#BED2E3',
+    fontSize: 12,
+    fontWeight: '700',
+    marginTop: 2,
+  },
+  scorePanel: {
+    alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    borderColor: 'rgba(255,255,255,0.15)',
+    borderRadius: 24,
+    borderWidth: 1,
+    justifyContent: 'center',
+    paddingHorizontal: 14,
+    width: 104,
+  },
+  scoreValue: {
+    color: palette.text,
+    fontSize: 22,
+    fontWeight: '900',
+    marginTop: 8,
+  },
+  scoreLabel: {
+    color: palette.muted,
+    fontSize: 11,
+    fontWeight: '800',
   },
   statsRow: {
     flexDirection: 'row',
     gap: 10,
   },
   statCard: {
-    backgroundColor: 'rgba(6,17,31,0.38)',
-    borderColor: 'rgba(255,255,255,0.13)',
+    backgroundColor: 'rgba(5,8,18,0.34)',
+    borderColor: 'rgba(255,255,255,0.12)',
     borderRadius: 20,
     borderWidth: 1,
     flex: 1,
@@ -527,7 +601,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 14,
+    marginBottom: 15,
   },
   sectionText: {
     color: palette.text,
@@ -541,18 +615,18 @@ const styles = StyleSheet.create({
     fontWeight: '800',
   },
   packageList: {
-    gap: 12,
-    marginBottom: 22,
+    gap: 13,
+    marginBottom: 24,
   },
   packageCard: {
     backgroundColor: palette.card,
-    borderColor: 'rgba(255,255,255,0.11)',
+    borderColor: palette.line,
     borderRadius: radii.lg,
     borderWidth: 1,
-    padding: 16,
+    padding: 17,
   },
   packageSelected: {
-    backgroundColor: 'rgba(255,255,255,0.14)',
+    backgroundColor: palette.cardStrong,
     borderWidth: 1.4,
   },
   cardPressed: {
@@ -565,7 +639,9 @@ const styles = StyleSheet.create({
   },
   packageIcon: {
     alignItems: 'center',
+    borderColor: 'rgba(255,255,255,0.1)',
     borderRadius: 18,
+    borderWidth: 1,
     height: 46,
     justifyContent: 'center',
     width: 46,
@@ -592,6 +668,7 @@ const styles = StyleSheet.create({
   perkRow: {
     alignItems: 'center',
     flexDirection: 'row',
+    flexWrap: 'wrap',
     gap: 7,
     marginTop: 13,
   },
@@ -605,13 +682,27 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '900',
   },
+  perkChip: {
+    backgroundColor: 'rgba(255,255,255,0.08)',
+    borderColor: 'rgba(255,255,255,0.1)',
+    borderRadius: 999,
+    borderWidth: 1,
+    paddingHorizontal: 9,
+    paddingVertical: 5,
+  },
+  perkChipText: {
+    color: '#D7E4EF',
+    fontSize: 11,
+    fontWeight: '800',
+  },
   bookingCard: {
-    backgroundColor: 'rgba(255,255,255,0.1)',
-    borderColor: 'rgba(255,255,255,0.13)',
+    backgroundColor: 'rgba(255,255,255,0.095)',
+    borderColor: palette.line,
     borderRadius: radii.xl,
     borderWidth: 1,
     marginBottom: 28,
     padding: 18,
+    ...shadow,
   },
   bookingHeader: {
     alignItems: 'center',
@@ -634,6 +725,7 @@ const styles = StyleSheet.create({
   },
   priceBubble: {
     alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,0.06)',
     borderRadius: 999,
     borderWidth: 1,
     paddingHorizontal: 13,
@@ -651,8 +743,8 @@ const styles = StyleSheet.create({
     marginBottom: 18,
   },
   slot: {
-    backgroundColor: 'rgba(255,255,255,0.08)',
-    borderColor: 'rgba(255,255,255,0.11)',
+    backgroundColor: 'rgba(255,255,255,0.075)',
+    borderColor: palette.line,
     borderRadius: 999,
     borderWidth: 1,
     paddingHorizontal: 15,
@@ -688,7 +780,7 @@ const styles = StyleSheet.create({
     width: 24,
   },
   processText: {
-    color: '#D9E8F2',
+    color: '#DCEAF5',
     flex: 1,
     fontSize: 13,
     fontWeight: '800',
@@ -699,7 +791,7 @@ const styles = StyleSheet.create({
     width: 28,
   },
   cta: {
-    borderRadius: 24,
+    borderRadius: 26,
     overflow: 'hidden',
   },
   ctaPressed: {
@@ -710,7 +802,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 10,
     justifyContent: 'center',
-    paddingVertical: 17,
+    paddingVertical: 18,
   },
   ctaText: {
     color: palette.text,
@@ -724,7 +816,7 @@ const styles = StyleSheet.create({
   },
   benefitCard: {
     backgroundColor: palette.card,
-    borderColor: 'rgba(255,255,255,0.11)',
+    borderColor: palette.line,
     borderRadius: radii.lg,
     borderWidth: 1,
     minHeight: 156,
